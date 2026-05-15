@@ -57,6 +57,18 @@ Ogni combinazione viene analizzata per ottenere il risultato più efficiente pos
 
 ---
 
+# Regression Test
+
+Per verificare che il comportamento attuale resti stabile durante i refactor, puoi eseguire:
+
+```bash
+node --test tests/regression.test.mjs
+```
+
+Il test blocca il comportamento dell'algoritmo di partizionamento sui casi più importanti.
+
+---
+
 # Come Utilizzarlo
 
 1. Apri la web app
@@ -86,10 +98,7 @@ https://gdr-sys.github.io/7th-sea-dice-roller/
 
 # Possibili Miglioramenti Futuri
 
-- cronologia tiri
-- modalità dark/light
 - integrazione scheda personaggio
-- supporto multilingua
 
 ---
 
