@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dice roller - 7th sea</title>
+    <title>Dice Roller - 7th Sea</title>
     <style>
         :root { 
             --primary: #38bdf8; --bg: #f8fafc; --card: #ffffff; 
@@ -19,8 +19,38 @@
             display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0; 
             transition: all 0.3s ease; min-height: 100vh;
         }
-        .header-tools { width: 100%; max-width: 380px; display: flex; justify-content: flex-end; margin-bottom: 10px; }
-        .theme-toggle { background: var(--card); border: 2px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 0.75rem; }
+        .header-tools { 
+            width: 100%; max-width: 380px; display: flex; 
+            justify-content: space-between; align-items: center; margin-bottom: 10px; 
+        }
+
+        /* Language selector */
+        .lang-selector { position: relative; }
+        .lang-btn {
+            background: var(--card); border: 2px solid var(--border); color: var(--text);
+            padding: 6px 12px; border-radius: 12px; cursor: pointer; font-weight: bold;
+            font-size: 0.85rem; display: flex; align-items: center; gap: 6px;
+            white-space: nowrap;
+        }
+        .lang-btn:hover { border-color: var(--primary); }
+        .lang-dropdown {
+            display: none; position: absolute; top: calc(100% + 6px); left: 0;
+            background: var(--card); border: 2px solid var(--border); border-radius: 12px;
+            overflow: hidden; z-index: 100; min-width: 130px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        .lang-dropdown.open { display: block; }
+        .lang-option {
+            padding: 10px 14px; cursor: pointer; font-size: 0.85rem; font-weight: 600;
+            display: flex; align-items: center; gap: 8px; transition: background 0.15s;
+        }
+        .lang-option:hover { background: var(--input-bg); }
+        .lang-option.active { color: var(--primary); }
+
+        .theme-toggle { 
+            background: var(--card); border: 2px solid var(--border); color: var(--text); 
+            padding: 6px 12px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 0.75rem; 
+        }
         
         .card { background: var(--card); padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 380px; box-sizing: border-box; border: 1px solid var(--border); }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
@@ -59,23 +89,38 @@
 <body data-theme="dark">
 
     <div class="header-tools">
-        <div class="theme-toggle" onclick="toggleTheme()">TEMA 🌓</div>
+        <!-- Language selector -->
+        <div class="lang-selector" id="langSelector">
+            <button class="lang-btn" onclick="toggleLangDropdown()" id="langBtn">
+                <span id="currentFlag">🇮🇹</span>
+                <span id="currentLangCode">IT</span>
+                ▾
+            </button>
+            <div class="lang-dropdown" id="langDropdown">
+                <div class="lang-option active" onclick="setLang('it')">🇮🇹 IT — Italiano</div>
+                <div class="lang-option" onclick="setLang('en')">🇬🇧 EN — English</div>
+                <div class="lang-option" onclick="setLang('fr')">🇫🇷 FR — Français</div>
+                <div class="lang-option" onclick="setLang('de')">🇩🇪 DE — Deutsch</div>
+            </div>
+        </div>
+
+        <div class="theme-toggle" onclick="toggleTheme()" id="themeBtn">TEMA 🌓</div>
     </div>
 
     <div class="card">
         <div class="grid">
-            <div><label>N. Dadi</label><input type="number" id="count" value="5"></div>
+            <div><label id="lbl-count">N. Dadi</label><input type="number" id="count" value="5"></div>
             <div>
-                <label>Obiettivo</label>
+                <label id="lbl-target">Obiettivo</label>
                 <select id="target" onchange="render()">
-                    <option value="10">Somma 10</option>
-                    <option value="15">Somma 15 (+10)</option>
+                    <option value="10" id="opt-10">Somma 10</option>
+                    <option value="15" id="opt-15">Somma 15 (+10)</option>
                 </select>
             </div>
         </div>
 
         <div class="bonus-section">
-            <span>Aggiungi bonus a ogni dado:</span>
+            <span id="lbl-bonus">Aggiungi bonus a ogni dado:</span>
             <select id="bonusValue">
                 <option value="0">0</option>
                 <option value="1">+1</option>
@@ -86,22 +131,165 @@
             </select>
         </div>
 
-        <label class="option-tile" id="tile2"><input type="checkbox" id="expl" onchange="uS('tile2', this)"><span>Esplosione del 10</span></label>
+        <label class="option-tile" id="tile2">
+            <input type="checkbox" id="expl" onchange="uS('tile2', this)">
+            <span id="lbl-explode">Esplosione del 10</span>
+        </label>
         
-        <button class="main-btn" onclick="firstRoll()">LANCIA DADI</button>
+        <button class="main-btn" onclick="firstRoll()" id="btn-roll">LANCIA DADI</button>
         <button id="rerollBtn" class="reroll" onclick="rerollSelected()">RILANCIA SELEZIONATO</button>
     </div>
 
     <div id="results"></div>
 
     <footer class="footer-noemi">
-        <p>Progetto e idea di <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a></p>
+        <p id="footer-text">Progetto e idea di <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a></p>
     </footer>
 
     <script>
+        // ─────────────────────────────────────────────
+        // TRANSLATIONS
+        // Terminology follows official 7th Sea localizations:
+        //   IT: "Incremento" (official Italian edition)
+        //   EN: "Raise" (original English edition)
+        //   FR: "Relance" (official French edition)
+        //   DE: "Erfolg" (official German edition, literally "success/raise")
+        // ─────────────────────────────────────────────
+        const LANGS = {
+            it: {
+                flag: '🇮🇹', code: 'IT',
+                themeBtn: 'TEMA 🌓',
+                lblCount: 'N. Dadi',
+                lblTarget: 'Obiettivo',
+                opt10: 'Somma 10',
+                opt15: 'Somma 15 (+10)',
+                lblBonus: 'Aggiungi bonus a ogni dado:',
+                lblExplode: 'Esplosione del 10',
+                btnRoll: 'LANCIA DADI',
+                btnReroll: 'RILANCIA SELEZIONATO',
+                h3Dice: 'Dadi Lanciati',
+                h3Combos: 'Combinazioni',
+                h3Discards: 'Scarti',
+                summaryOne: 'INCREMENTO',
+                summaryMany: 'INCREMENTI',
+                incLabel: 'INC',
+                wasteLabel: 'Scarti',
+                extBadge: 'EXT',
+                footer: 'Progetto e idea di <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
+            },
+            en: {
+                flag: '🇬🇧', code: 'EN',
+                themeBtn: 'THEME 🌓',
+                lblCount: 'No. of Dice',
+                lblTarget: 'Target',
+                opt10: 'Sum 10',
+                opt15: 'Sum 15 (+10)',
+                lblBonus: 'Add bonus to each die:',
+                lblExplode: 'Exploding 10s',
+                btnRoll: 'ROLL DICE',
+                btnReroll: 'REROLL SELECTED',
+                h3Dice: 'Dice Rolled',
+                h3Combos: 'Combinations',
+                h3Discards: 'Discards',
+                summaryOne: 'RAISE',
+                summaryMany: 'RAISES',
+                incLabel: 'RAISE',
+                wasteLabel: 'Unused',
+                extBadge: 'EXP',
+                footer: 'Design & concept by <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
+            },
+            fr: {
+                flag: '🇫🇷', code: 'FR',
+                themeBtn: 'THÈME 🌓',
+                lblCount: 'Nb. de Dés',
+                lblTarget: 'Objectif',
+                opt10: 'Somme 10',
+                opt15: 'Somme 15 (+10)',
+                lblBonus: 'Ajouter un bonus à chaque dé :',
+                lblExplode: 'Explosion du 10',
+                btnRoll: 'LANCER LES DÉS',
+                btnReroll: 'RELANCER LE DÉ SÉLECTIONNÉ',
+                h3Dice: 'Dés Lancés',
+                h3Combos: 'Combinaisons',
+                h3Discards: 'Rebus',
+                summaryOne: 'RELANCE',
+                summaryMany: 'RELANCES',
+                incLabel: 'REL',
+                wasteLabel: 'Rebus',
+                extBadge: 'EXP',
+                footer: 'Projet et idée de <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
+            },
+            de: {
+                flag: '🇩🇪', code: 'DE',
+                themeBtn: 'THEMA 🌓',
+                lblCount: 'Anzahl Würfel',
+                lblTarget: 'Zielwert',
+                opt10: 'Summe 10',
+                opt15: 'Summe 15 (+10)',
+                lblBonus: 'Bonus pro Würfel hinzufügen:',
+                lblExplode: 'Explodierender 10er',
+                btnRoll: 'WÜRFELN',
+                btnReroll: 'AUSGEWÄHLTEN NEU WÜRFELN',
+                h3Dice: 'Gewürfelte Würfel',
+                h3Combos: 'Kombinationen',
+                h3Discards: 'Abwürfe',
+                summaryOne: 'ERFOLG',
+                summaryMany: 'ERFOLGE',
+                incLabel: 'ERF',
+                wasteLabel: 'Abwürfe',
+                extBadge: 'EXP',
+                footer: 'Projekt und Idee von <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
+            }
+        };
+
+        let currentLang = 'it';
         let currentDice = [];
         let rerollAvailable = true;
 
+        // ─── Language handling ───────────────────────
+        function toggleLangDropdown() {
+            document.getElementById('langDropdown').classList.toggle('open');
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!document.getElementById('langSelector').contains(e.target)) {
+                document.getElementById('langDropdown').classList.remove('open');
+            }
+        });
+
+        function setLang(lang) {
+            currentLang = lang;
+            const t = LANGS[lang];
+
+            // Update flag/code button
+            document.getElementById('currentFlag').textContent = t.flag;
+            document.getElementById('currentLangCode').textContent = t.code;
+
+            // Mark active option
+            document.querySelectorAll('.lang-option').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.lang-option').forEach(el => {
+                if (el.textContent.includes(t.code)) el.classList.add('active');
+            });
+
+            // Update UI text
+            document.getElementById('themeBtn').textContent = t.themeBtn;
+            document.getElementById('lbl-count').textContent = t.lblCount;
+            document.getElementById('lbl-target').textContent = t.lblTarget;
+            document.getElementById('opt-10').textContent = t.opt10;
+            document.getElementById('opt-15').textContent = t.opt15;
+            document.getElementById('lbl-bonus').textContent = t.lblBonus;
+            document.getElementById('lbl-explode').textContent = t.lblExplode;
+            document.getElementById('btn-roll').textContent = t.btnRoll;
+            document.getElementById('rerollBtn').textContent = t.btnReroll;
+            document.getElementById('footer-text').innerHTML = t.footer;
+
+            document.getElementById('langDropdown').classList.remove('open');
+
+            // Re-render results if any
+            if (currentDice.length > 0) render();
+        }
+
+        // ─── Theme ───────────────────────────────────
         function toggleTheme() {
             const b = document.body;
             b.setAttribute('data-theme', b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
@@ -109,6 +297,7 @@
 
         function uS(id, cb) { document.getElementById(id).classList.toggle('active', cb.checked); }
 
+        // ─── Dice logic ──────────────────────────────
         function rollSingle(isExtra = false) {
             const bonus = parseInt(document.getElementById('bonusValue').value);
             const r = Math.floor(Math.random() * 10) + 1;
@@ -144,7 +333,7 @@
         function rerollSelected() {
             if (!rerollAvailable) return;
             let idx = currentDice.findIndex(d => d.selected);
-            if(idx !== -1) {
+            if (idx !== -1) {
                 currentDice.splice(idx, 1);
                 let d = rollSingle(false);
                 currentDice.push(d);
@@ -159,24 +348,18 @@
             const diceValues = [...dice].sort((a, b) => b - a);
 
             function solve(remaining, currentSets) {
-                let foundAny = false;
-
                 for (let size = 1; size <= remaining.length; size++) {
                     const combos = getCombos(remaining, size);
                     for (const combo of combos) {
                         const sum = combo.reduce((a, b) => a + b, 0);
-                        let type = 0;
-                        let incValue = 0;
-
+                        let type = 0, incValue = 0;
                         if (targetMode === 15) {
                             if (sum >= 15) { type = 15; incValue = 2; }
                             else if (sum >= 10) { type = 10; incValue = 1; }
                         } else if (sum >= 10) {
                             type = 10; incValue = 1;
                         }
-
                         if (type > 0) {
-                            foundAny = true;
                             const nextRem = [...remaining];
                             combo.forEach(v => nextRem.splice(nextRem.indexOf(v), 1));
                             currentSets.push({ v: combo, t: sum, type: type, inc: incValue });
@@ -185,16 +368,9 @@
                         }
                     }
                 }
-
                 const totalInc = currentSets.reduce((acc, s) => acc + s.inc, 0);
                 const totalWaste = currentSets.reduce((acc, s) => acc + (s.t - s.type), 0);
-                
-                // NUOVA LOGICA DI PUNTEGGIO:
-                // 1. Priorità massima agli Incrementi.
-                // 2. Priorità secondaria al numero di dadi SCARTATI (remaining.length).
-                // 3. Penalità minima allo spreco di punti (totalWaste) per "pulizia".
                 const score = (totalInc * 1000000) + (remaining.length * 1000) - (totalWaste * 1);
-
                 if (score > best.score) {
                     best.score = score;
                     best.sets = JSON.parse(JSON.stringify(currentSets));
@@ -223,31 +399,35 @@
 
         function render() {
             if (currentDice.length === 0) return;
+            const t = LANGS[currentLang];
             const target = parseInt(document.getElementById('target').value);
             const resDiv = document.getElementById('results');
-            document.getElementById('rerollBtn').style.display = (rerollAvailable && currentDice.some(d => d.selected)) ? 'block' : 'none';
+            const anySelected = currentDice.some(d => d.selected);
+            document.getElementById('rerollBtn').style.display = (rerollAvailable && anySelected) ? 'block' : 'none';
+            document.getElementById('rerollBtn').textContent = t.btnReroll;
 
-            let html = '<h3>Dadi Lanciati</h3><div style="text-align:center;">';
+            let html = `<h3>${t.h3Dice}</h3><div style="text-align:center;">`;
             currentDice.forEach((d, i) => {
-                html += `<div class="die ${d.selected ? 'selected' : ''}" onclick="toggleSelect(${i})">${d.val}${d.exploded ? '<span class="ext-badge">EXT</span>' : ''}</div>`;
+                html += `<div class="die ${d.selected ? 'selected' : ''}" onclick="toggleSelect(${i})">${d.val}${d.exploded ? `<span class="ext-badge">${t.extBadge}</span>` : ''}</div>`;
             });
 
             const result = findBestPartition(currentDice.map(d => d.val), target);
-            html += `</div><div class="summary-box">${result.totalIncrements} ${result.totalIncrements === 1 ? 'INCREMENTO' : 'INCREMENTI'}</div>`;
+            const incWord = result.totalIncrements === 1 ? t.summaryOne : t.summaryMany;
+            html += `</div><div class="summary-box">${result.totalIncrements} ${incWord}</div>`;
             
             if (result.sets.length > 0) {
-                html += '<h3>Combinazioni</h3>';
+                html += `<h3>${t.h3Combos}</h3>`;
                 result.sets.forEach(s => {
                     let setClass = s.type === 15 ? 'set-15' : 'set-10';
                     html += `<div class="set ${setClass}">
                                 <span>${s.v.join(' + ')} = <b>${s.t}</b></span>
-                                <span class="inc-badge">+${s.inc} INC</span>
+                                <span class="inc-badge">+${s.inc} ${t.incLabel}</span>
                              </div>`;
                 });
             }
 
             if (result.leftovers.length > 0) {
-                html += `<h3>Scarti</h3><div class="waste">Scarti: ${result.leftovers.sort((a,b)=>b-a).join(', ')}</div>`;
+                html += `<h3>${t.h3Discards}</h3><div class="waste">${t.wasteLabel}: ${result.leftovers.sort((a,b)=>b-a).join(', ')}</div>`;
             }
             resDiv.innerHTML = html;
         }
