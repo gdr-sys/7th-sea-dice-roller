@@ -101,6 +101,7 @@
                 <div class="lang-option" onclick="setLang('en')">🇬🇧 EN — English</div>
                 <div class="lang-option" onclick="setLang('fr')">🇫🇷 FR — Français</div>
                 <div class="lang-option" onclick="setLang('de')">🇩🇪 DE — Deutsch</div>
+                <div class="lang-option" onclick="setLang('es')">🇪🇸 ES — Español</div>
             </div>
         </div>
 
@@ -109,7 +110,7 @@
 
     <div class="card">
         <div class="grid">
-            <div><label id="lbl-count">N. Dadi</label><input type="number" id="count" value="5"></div>
+            <div><label id="lbl-count">N. Dadi</label><input type="number" id="count" value="5" min="1" max="20"></div>
             <div>
                 <label id="lbl-target">Obiettivo</label>
                 <select id="target" onchange="render()">
@@ -154,6 +155,7 @@
         //   EN: "Raise" (original English edition)
         //   FR: "Relance" (official French edition)
         //   DE: "Erfolg" (official German edition, literally "success/raise")
+        //   ES: "Aumento" (official Spanish edition)
         // ─────────────────────────────────────────────
         const LANGS = {
             it: {
@@ -239,6 +241,27 @@
                 wasteLabel: 'Abwürfe',
                 extBadge: 'EXP',
                 footer: 'Projekt und Idee von <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
+            },
+            es: {
+                flag: '🇪🇸', code: 'ES',
+                themeBtn: 'TEMA 🌓',
+                lblCount: 'N.º de Dados',
+                lblTarget: 'Objetivo',
+                opt10: 'Suma 10',
+                opt15: 'Suma 15 (+10)',
+                lblBonus: 'Añadir bonificación a cada dado:',
+                lblExplode: 'Explosión del 10',
+                btnRoll: 'LANZAR DADOS',
+                btnReroll: 'RELANZAR SELECCIONADO',
+                h3Dice: 'Dados Lanzados',
+                h3Combos: 'Combinaciones',
+                h3Discards: 'Descartes',
+                summaryOne: 'AUMENTO',
+                summaryMany: 'AUMENTOS',
+                incLabel: 'AUM',
+                wasteLabel: 'Descartes',
+                extBadge: 'EXP',
+                footer: 'Proyecto e idea de <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
             }
         };
 
