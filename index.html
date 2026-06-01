@@ -110,7 +110,7 @@
 
     <div class="card">
         <div class="grid">
-            <div><label id="lbl-count">N. Dadi</label><input type="number" id="count" value="5" min="1" max="20"></div>
+            <div><label id="lbl-count">N. Dadi</label><input type="number" id="count" value="5" min="1"></div>
             <div>
                 <label id="lbl-target">Obiettivo</label>
                 <select id="target" onchange="render()">
@@ -329,7 +329,8 @@
 
         function firstRoll() {
             rerollAvailable = true;
-            const n = parseInt(document.getElementById('count').value) || 0;
+            const n = Math.max(1, parseInt(document.getElementById('count').value) || 1);
+            document.getElementById('count').value = n;
             currentDice = [];
             for (let i = 0; i < n; i++) {
                 let d = rollSingle(false);
@@ -367,57 +368,125 @@
         }
 
         function findBestPartition(dice, targetMode) {
-            let best = { sets: [], leftovers: [...dice], totalIncrements: 0, score: -Infinity };
-            const diceValues = [...dice].sort((a, b) => b - a);
+            // Greedy algorithm: scales safely to any number of dice.
+            // Strategy: sort descending, greedily pair/group dice to maximize increments.
+            // For targetMode=15: prefer groups summing >=15 (2 inc), then >=10 (1 inc).
+            // For targetMode=10: groups summing >=10 (1 inc).
 
-            function solve(remaining, currentSets) {
-                for (let size = 1; size <= remaining.length; size++) {
-                    const combos = getCombos(remaining, size);
-                    for (const combo of combos) {
-                        const sum = combo.reduce((a, b) => a + b, 0);
-                        let type = 0, incValue = 0;
-                        if (targetMode === 15) {
-                            if (sum >= 15) { type = 15; incValue = 2; }
-                            else if (sum >= 10) { type = 10; incValue = 1; }
-                        } else if (sum >= 10) {
-                            type = 10; incValue = 1;
-                        }
-                        if (type > 0) {
-                            const nextRem = [...remaining];
-                            combo.forEach(v => nextRem.splice(nextRem.indexOf(v), 1));
-                            currentSets.push({ v: combo, t: sum, type: type, inc: incValue });
-                            solve(nextRem, currentSets);
-                            currentSets.pop();
-                        }
+            const sorted = [...dice].sort((a, b) => b - a);
+            const used = new Array(sorted.length).fill(false);
+            const sets = [];
+
+            // Helper: try to build one set starting from index `start`
+            // accumulating dice until sum meets threshold, without exceeding wastefully
+            function buildSet(threshold) {
+                let combo = [];
+                let sum = 0;
+                // First pass: pick largest unused dice that fit toward threshold
+                for (let i = 0; i < sorted.length; i++) {
+                    if (used[i]) continue;
+                    if (sum + sorted[i] >= threshold) {
+                        combo.push({ idx: i, val: sorted[i] });
+                        sum += sorted[i];
+                        break; // one die enough
                     }
                 }
-                const totalInc = currentSets.reduce((acc, s) => acc + s.inc, 0);
-                const totalWaste = currentSets.reduce((acc, s) => acc + (s.t - s.type), 0);
-                const score = (totalInc * 1000000) + (remaining.length * 1000) - (totalWaste * 1);
-                if (score > best.score) {
-                    best.score = score;
-                    best.sets = JSON.parse(JSON.stringify(currentSets));
-                    best.leftovers = [...remaining];
-                    best.totalIncrements = totalInc;
+                if (sum >= threshold) return { combo, sum };
+
+                // Need more dice — keep adding smallest unused that help
+                const candidates = [];
+                for (let i = 0; i < sorted.length; i++) {
+                    if (used[i]) continue;
+                    candidates.push({ idx: i, val: sorted[i] });
+                }
+                // Sort ascending to minimize waste
+                candidates.sort((a, b) => a.val - b.val);
+                combo = [];
+                sum = 0;
+                // Pick from largest first to reach threshold efficiently
+                const desc = [...candidates].reverse();
+                for (const c of desc) {
+                    combo.push(c);
+                    sum += c.val;
+                    if (sum >= threshold) break;
+                }
+                if (sum >= threshold) return { combo, sum };
+                return null;
+            }
+
+            if (targetMode === 15) {
+                // Pass 1: try to form groups summing >= 15 (2 increments each)
+                let changed = true;
+                while (changed) {
+                    changed = false;
+                    // Collect unused
+                    let pool = [];
+                    for (let i = 0; i < sorted.length; i++) {
+                        if (!used[i]) pool.push({ idx: i, val: sorted[i] });
+                    }
+                    // Try greedy: accumulate until sum >= 15
+                    let combo = [], sum = 0;
+                    // Sort pool descending
+                    pool.sort((a, b) => b.val - a.val);
+                    for (const p of pool) {
+                        combo.push(p);
+                        sum += p.val;
+                        if (sum >= 15) break;
+                    }
+                    if (sum >= 15) {
+                        combo.forEach(c => used[c.idx] = true);
+                        sets.push({ v: combo.map(c => c.val), t: sum, type: 15, inc: 2 });
+                        changed = true;
+                    }
+                }
+                // Pass 2: form groups summing >= 10 (1 increment each)
+                let changed2 = true;
+                while (changed2) {
+                    changed2 = false;
+                    let pool = [];
+                    for (let i = 0; i < sorted.length; i++) {
+                        if (!used[i]) pool.push({ idx: i, val: sorted[i] });
+                    }
+                    pool.sort((a, b) => b.val - a.val);
+                    let combo = [], sum = 0;
+                    for (const p of pool) {
+                        combo.push(p);
+                        sum += p.val;
+                        if (sum >= 10) break;
+                    }
+                    if (sum >= 10) {
+                        combo.forEach(c => used[c.idx] = true);
+                        sets.push({ v: combo.map(c => c.val), t: sum, type: 10, inc: 1 });
+                        changed2 = true;
+                    }
+                }
+            } else {
+                // targetMode === 10: form groups summing >= 10
+                let changed = true;
+                while (changed) {
+                    changed = false;
+                    let pool = [];
+                    for (let i = 0; i < sorted.length; i++) {
+                        if (!used[i]) pool.push({ idx: i, val: sorted[i] });
+                    }
+                    pool.sort((a, b) => b.val - a.val);
+                    let combo = [], sum = 0;
+                    for (const p of pool) {
+                        combo.push(p);
+                        sum += p.val;
+                        if (sum >= 10) break;
+                    }
+                    if (sum >= 10) {
+                        combo.forEach(c => used[c.idx] = true);
+                        sets.push({ v: combo.map(c => c.val), t: sum, type: 10, inc: 1 });
+                        changed = true;
+                    }
                 }
             }
 
-            function getCombos(arr, k) {
-                const results = [];
-                function helper(start, current) {
-                    if (current.length === k) { results.push([...current]); return; }
-                    for (let i = start; i < arr.length; i++) {
-                        current.push(arr[i]);
-                        helper(i + 1, current);
-                        current.pop();
-                    }
-                }
-                helper(0, []);
-                return results;
-            }
-
-            solve(diceValues, []);
-            return best;
+            const leftovers = sorted.filter((_, i) => !used[i]);
+            const totalIncrements = sets.reduce((acc, s) => acc + s.inc, 0);
+            return { sets, leftovers, totalIncrements };
         }
 
         function render() {
