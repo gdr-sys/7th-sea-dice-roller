@@ -139,7 +139,14 @@
         }
         .advanced-panel.open { max-height: 700px; padding: 16px 20px 20px; margin-bottom: 12px; }
 
-        .footer-noemi { text-align: center; padding: 40px 10px; font-size: 0.85em; color: var(--footer); width: 100%; }
+        .kofi-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #FF5E5B; color: #fff; font-weight: 800; font-size: 0.85rem;
+            padding: 10px 20px; border-radius: 50px; text-decoration: none;
+            margin-top: 8px; transition: opacity 0.2s; box-shadow: 0 4px 12px rgba(255,94,91,0.35);
+        }
+        .kofi-btn:hover { opacity: 0.85; }
+        .footer-noemi { text-align: center; padding: 30px 10px 40px; font-size: 0.85em; color: var(--footer); width: 100%; }
         .link-noemi { color: inherit; text-decoration: none; font-weight: 600; border-bottom: 1px solid currentColor; }
     </style>
 </head>
@@ -258,6 +265,9 @@
     <div id="results"></div>
 
     <footer class="footer-noemi">
+        <a href="https://ko-fi.com/noemimarcolini" target="_blank" rel="noopener" class="kofi-btn">
+            <span id="kofi-btn-label">☕ Ko-fi — Offrimi un caffè!</span>
+        </a>
         <p id="footer-text">Progetto e idea di <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a></p>
     </footer>
 
@@ -288,6 +298,7 @@ const LANGS = {
         gioiaHint:'Gioia di Vivere: aggiungendo +1 a',
         gioiaSuffix:'raggiungeresti un ulteriore set!',
         lblAdvanced:'🎭 Vantaggi & Manipolazioni',
+        kofiLabel:'☕ Ko-fi — Offrimi un caffè!',
         footer:'Progetto e idea di <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
     },
     en: {
@@ -313,6 +324,7 @@ const LANGS = {
         gioiaHint:'Joie de Vivre: adding +1 to',
         gioiaSuffix:'would complete an extra set!',
         lblAdvanced:'🎭 Advantages & Manipulations',
+        kofiLabel:'☕ Ko-fi — Buy me a coffee!',
         footer:'Design & concept by <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
     },
     fr: {
@@ -338,6 +350,7 @@ const LANGS = {
         gioiaHint:'Joie de Vivre : en ajoutant +1 à',
         gioiaSuffix:'vous compléteriez une relance supplémentaire !',
         lblAdvanced:'🎭 Avantages & Manipulations',
+        kofiLabel:'☕ Ko-fi — Offre-moi un café !',
         footer:'Projet et idée de <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
     },
     de: {
@@ -363,6 +376,7 @@ const LANGS = {
         gioiaHint:'Lebensfreude: +1 auf',
         gioiaSuffix:'würde eine weitere Gruppe ergeben!',
         lblAdvanced:'🎭 Vorteile & Manipulationen',
+        kofiLabel:'☕ Ko-fi — Spendiere mir einen Kaffee!',
         footer:'Projekt und Idee von <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
     },
     es: {
@@ -388,6 +402,7 @@ const LANGS = {
         gioiaHint:'Alegría de Vivir: añadiendo +1 a',
         gioiaSuffix:'¡completarías un conjunto extra!',
         lblAdvanced:'🎭 Ventajas & Manipulaciones',
+        kofiLabel:'☕ Ko-fi — ¡Invítame un café!',
         footer:'Proyecto e idea de <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
     }
 };
@@ -436,6 +451,7 @@ function setLang(lang) {
     document.getElementById('rerollBtn').textContent      = t.btnReroll;
     document.getElementById('btn-roll').textContent       = t.btnRoll;
     document.getElementById('footer-text').innerHTML      = t.footer;
+    document.getElementById('kofi-btn-label').textContent  = t.kofiLabel;
     document.getElementById('lbl-advanced').textContent     = t.lblAdvanced;
     document.getElementById('langDropdown').classList.remove('open');
     if (currentDice.length > 0) render();
