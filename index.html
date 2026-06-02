@@ -87,6 +87,9 @@
 
         .ext-badge { position: absolute; top: -5px; right: -5px; background: var(--accent); color: #000; font-size: 0.55rem; padding: 2px 4px; border-radius: 4px; font-weight: 900; }
         .boost-badge { position: absolute; bottom: -5px; right: -5px; background: var(--purple); color: #fff; font-size: 0.55rem; padding: 2px 4px; border-radius: 4px; font-weight: 900; }
+        .die.no-explode { border-style: dashed; }
+        .lock-badge { position: absolute; top: -5px; left: -5px; background: #64748b; color: #fff; font-size: 0.5rem; padding: 2px 3px; border-radius: 4px; font-weight: 900; }
+        .bonus-label { font-size: 0.55rem; color: var(--success); font-weight: 900; vertical-align: super; }
 
         .set { background: rgba(16,185,129,0.1); border-left: 5px solid var(--success); padding: 14px; border-radius: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; color: var(--text); }
         .set-15 { border-left-color: var(--primary); background: rgba(56,189,248,0.1); }
@@ -172,17 +175,14 @@
                 </select>
             </div>
         </div>
+        <div class="bonus-section" style="margin-bottom:10px;">
+            <span id="lbl-bonus-dice">Dadi Bonus (inesplodibili):</span>
+            <input type="number" id="countBonus" value="0" min="0" style="width:70px;margin-top:0;padding:5px 10px;">
+        </div>
 
         <div class="bonus-section">
             <span id="lbl-bonus">Aggiungi bonus a ogni dado:</span>
-            <select id="bonusValue">
-                <option value="0">0</option>
-                <option value="1">+1</option>
-                <option value="2">+2</option>
-                <option value="3">+3</option>
-                <option value="4">+4</option>
-                <option value="5">+5</option>
-            </select>
+            <input type="number" id="bonusValue" value="0" min="0" style="width:70px;margin-top:0;padding:5px 10px;">
         </div>
 
         <!-- Esplosione (sempre visibile) -->
@@ -197,7 +197,7 @@
 
     <!-- ABILITÀ & MANIPOLAZIONI TOGGLE -->
     <div class="advanced-toggle" id="advancedToggle" onclick="toggleAdvanced()">
-        <span id="lbl-advanced">⚔️ Abilità &amp; Manipolazioni</span>
+        <span id="lbl-advanced">🎭 Vantaggi &amp; Manipolazioni</span>
         <span class="toggle-arrow">▼</span>
     </div>
 
@@ -220,6 +220,18 @@
         <label class="option-tile" id="tile-gioia" onclick="toggleTile('tile-gioia','gioia')">
             <input type="checkbox" id="gioia" onchange="render()">
             <span id="lbl-gioia">Gioia di Vivere (+1 virtuale agli scarti)</span>
+        </label>
+
+        <!-- Lupo di Mare -->
+        <label class="option-tile" id="tile-lupo" onclick="toggleTile('tile-lupo','lupoDiMare')">
+            <input type="checkbox" id="lupoDiMare" onchange="render()">
+            <span id="lbl-lupo">⚓ Lupo di Mare (i 9 valgono 10)</span>
+        </label>
+
+        <!-- Fuoco di Sbarramento -->
+        <label class="option-tile" id="tile-sbarramento" onclick="toggleTile('tile-sbarramento','sbarramento')">
+            <input type="checkbox" id="sbarramento" onchange="render()">
+            <span id="lbl-sbarramento">💣 Fuoco di Sbarramento (i dadi pari non si usano)</span>
         </label>
 
         <!-- MANIPOLAZIONE RISERVA -->
@@ -261,6 +273,9 @@ const LANGS = {
         lblExplode:'Esplosione del 10',
         lblDouble:'Set da 10 = 2 Incrementi',
         lblOnly15:'Malus: Solo Set da 15',
+        lblBonusDice:'Dadi Bonus (inesplodibili):',
+        lblLupo:'⚓ Lupo di Mare (i 9 valgono 10)',
+        lblSbarramento:'💣 Fuoco di Sbarramento (i dadi pari non si usano)',
         lblGioia:'Gioia di Vivere (+1 virtuale agli scarti)',
         lblRiserva:'Manipolazione Riserva',
         lblForce10:'💪 Forza un 10 (Indomabile)',
@@ -269,10 +284,10 @@ const LANGS = {
         btnRoll:'LANCIA DADI', btnReroll:'RILANCIA SELEZIONATO',
         h3Dice:'Dadi Lanciati', h3Combos:'Combinazioni', h3Discards:'Scarti',
         summaryOne:'INCREMENTO', summaryMany:'INCREMENTI', incLabel:'INC',
-        wasteLabel:'Scarti', extBadge:'EXT',
+        wasteLabel:'Dadi Rimasti', extBadge:'EXT',
         gioiaHint:'Gioia di Vivere: aggiungendo +1 a',
         gioiaSuffix:'raggiungeresti un ulteriore set!',
-        lblAdvanced:'⚔️ Abilità & Manipolazioni',
+        lblAdvanced:'🎭 Vantaggi & Manipolazioni',
         footer:'Progetto e idea di <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
     },
     en: {
@@ -283,6 +298,9 @@ const LANGS = {
         lblExplode:'Exploding 10s',
         lblDouble:'Set of 10 = 2 Raises',
         lblOnly15:'Malus: Only Sets of 15',
+        lblBonusDice:'Bonus Dice (non-exploding):',
+        lblLupo:'⚓ Sea Wolf (9s count as 10s)',
+        lblSbarramento:'💣 Barrage Fire (even dice cannot form sets)',
         lblGioia:'Joie de Vivre (+1 virtual to discards)',
         lblRiserva:'Reserve Manipulation',
         lblForce10:'💪 Force a 10 (Indomitable)',
@@ -294,7 +312,7 @@ const LANGS = {
         wasteLabel:'Unused', extBadge:'EXP',
         gioiaHint:'Joie de Vivre: adding +1 to',
         gioiaSuffix:'would complete an extra set!',
-        lblAdvanced:'⚔️ Abilities & Manipulations',
+        lblAdvanced:'🎭 Advantages & Manipulations',
         footer:'Design & concept by <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
     },
     fr: {
@@ -305,6 +323,9 @@ const LANGS = {
         lblExplode:'Explosion du 10',
         lblDouble:'Combinaison de 10 = 2 Relances',
         lblOnly15:'Malus : Seulement Combinaisons de 15',
+        lblBonusDice:'Dés Bonus (non-explosifs) :',
+        lblLupo:'⚓ Loup de Mer (les 9 valent 10)',
+        lblSbarramento:'💣 Tir de Barrage (les dés pairs ne forment pas de combinaisons)',
         lblGioia:'Joie de Vivre (+1 virtuel aux rebuts)',
         lblRiserva:'Manipulation de Réserve',
         lblForce10:'💪 Forcer un 10 (Indomptable)',
@@ -316,7 +337,7 @@ const LANGS = {
         wasteLabel:'Rebus', extBadge:'EXP',
         gioiaHint:'Joie de Vivre : en ajoutant +1 à',
         gioiaSuffix:'vous compléteriez une relance supplémentaire !',
-        lblAdvanced:'⚔️ Capacités & Manipulations',
+        lblAdvanced:'🎭 Avantages & Manipulations',
         footer:'Projet et idée de <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
     },
     de: {
@@ -327,6 +348,9 @@ const LANGS = {
         lblExplode:'Explodierender 10er',
         lblDouble:'10er-Gruppe = 2 Erfolge',
         lblOnly15:'Malus: Nur 15er-Gruppen',
+        lblBonusDice:'Bonuswürfel (explodieren nicht):',
+        lblLupo:'⚓ Seewolf (9er zählen als 10er)',
+        lblSbarramento:'💣 Sperrfeuer (gerade Würfel bilden keine Gruppen)',
         lblGioia:'Lebensfreude (+1 virtuell auf Abwürfe)',
         lblRiserva:'Reservenmanipulation',
         lblForce10:'💪 Eine 10 erzwingen (Unbezähmbar)',
@@ -338,7 +362,7 @@ const LANGS = {
         wasteLabel:'Abwürfe', extBadge:'EXP',
         gioiaHint:'Lebensfreude: +1 auf',
         gioiaSuffix:'würde eine weitere Gruppe ergeben!',
-        lblAdvanced:'⚔️ Fähigkeiten & Manipulationen',
+        lblAdvanced:'🎭 Vorteile & Manipulationen',
         footer:'Projekt und Idee von <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
     },
     es: {
@@ -349,6 +373,9 @@ const LANGS = {
         lblExplode:'Explosión del 10',
         lblDouble:'Combinación de 10 = 2 Aumentos',
         lblOnly15:'Malus: Solo Combinaciones de 15',
+        lblBonusDice:'Dados Bonus (no explotan):',
+        lblLupo:'⚓ Lobo de Mar (los 9 valen 10)',
+        lblSbarramento:'💣 Fuego de Barrera (los dados pares no forman conjuntos)',
         lblGioia:'Alegría de Vivir (+1 virtual a descartes)',
         lblRiserva:'Manipulación de Reserva',
         lblForce10:'💪 Forzar un 10 (Indomable)',
@@ -360,7 +387,7 @@ const LANGS = {
         wasteLabel:'Descartes', extBadge:'EXP',
         gioiaHint:'Alegría de Vivir: añadiendo +1 a',
         gioiaSuffix:'¡completarías un conjunto extra!',
-        lblAdvanced:'⚔️ Habilidades & Manipulaciones',
+        lblAdvanced:'🎭 Ventajas & Manipulaciones',
         footer:'Proyecto e idea de <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
     }
 };
@@ -397,6 +424,9 @@ function setLang(lang) {
     document.getElementById('opt-15').textContent         = t.opt15;
     document.getElementById('lbl-bonus').textContent      = t.lblBonus;
     document.getElementById('lbl-explode').textContent    = t.lblExplode;
+    document.getElementById('lbl-bonus-dice').textContent  = t.lblBonusDice;
+    document.getElementById('lbl-lupo').textContent         = t.lblLupo;
+    document.getElementById('lbl-sbarramento').textContent  = t.lblSbarramento;
     document.getElementById('lbl-double').textContent     = t.lblDouble;
     document.getElementById('lbl-only15').textContent     = t.lblOnly15;
     document.getElementById('lbl-gioia').textContent      = t.lblGioia;
@@ -440,25 +470,53 @@ function onOnly15Change() {
 }
 
 // ─── DICE LOGIC ──────────────────────────────────────────────────────────────
+// rollSingle: val stores NATURAL result; bonus stored separately and shown via label.
+// The partition uses effectiveVal() = natural + bonus + boost (never affecting explosion check).
 function rollSingle(isExtra = false) {
-    const bonus = parseInt(document.getElementById('bonusValue').value) || 0;
+    const bonus = isExtra ? 0 : (parseInt(document.getElementById('bonusValue').value) || 0);
     const r = Math.floor(Math.random() * 10) + 1;
-    return { val: r + bonus, natural: r, exploded: isExtra, selected: false, boost: 0 };
+    // natural: raw die result (used for explosion check and display)
+    // bonus: static bonus from bonusValue (displayed separately, summed only in partition)
+    // boost: bonus added via Distribuisci +X (affects effective value, shown as badge)
+    return { val: r, natural: r, bonus: bonus, exploded: isExtra, selected: false, boost: 0, noExplode: false };
+}
+
+// effectiveVal: the value used for partition calculation
+function effectiveVal(d) { return d.natural + (d.bonus || 0) + (d.boost || 0); }
+
+// rollBonusDie: external bonus dice — clean roll, never explode, no static bonus
+function rollBonusDie() {
+    const r = Math.floor(Math.random() * 10) + 1;
+    return { val: r, natural: r, bonus: 0, exploded: false, selected: false, boost: 0, noExplode: true };
 }
 
 function firstRoll() {
-    // Reset all modes
     cancelForce10();
     cancelBonusFree();
     rerollAvailable = true;
+
+    // Main dice pool
     const n = Math.max(1, parseInt(document.getElementById('count').value) || 1);
     document.getElementById('count').value = n;
+
+    // Bonus external dice (never explode)
+    const nb = Math.max(0, parseInt(document.getElementById('countBonus').value) || 0);
+    document.getElementById('countBonus').value = nb;
+
     currentDice = [];
+
+    // Roll main dice (can explode if natural 10 and option active)
     for (let i = 0; i < n; i++) {
         const d = rollSingle(false);
         currentDice.push(d);
         if (document.getElementById('expl').checked && d.natural === 10) rollExtra();
     }
+
+    // Roll bonus external dice (never explode, no static bonus)
+    for (let i = 0; i < nb; i++) {
+        currentDice.push(rollBonusDie());
+    }
+
     document.getElementById('riservaRow').style.display = 'flex';
     document.getElementById('bonusFreeRow').style.display = 'flex';
     const hint = document.getElementById('riservaHint');
@@ -466,8 +524,9 @@ function firstRoll() {
     render();
 }
 
+// Extra dice from explosion: clean roll (no bonus), can chain-explode
 function rollExtra() {
-    const extra = rollSingle(true);
+    const extra = rollSingle(true); // isExtra=true → no bonus applied
     currentDice.push(extra);
     if (extra.natural === 10) rollExtra();
 }
@@ -509,12 +568,15 @@ function cancelForce10() {
     if (btn) btn.classList.remove('active');
 }
 function applyForce10(index) {
-    // Set die to 10 (no explosion, as per spec)
-    currentDice[index].val = 10;
+    // Force die to natural 10 — if Esplosione is active, trigger explosion (rule-correct)
     currentDice[index].natural = 10;
     currentDice[index].boost = 0;
     force10Mode = false;
     document.getElementById('btnForce10').classList.remove('active');
+    // Trigger explosion chain if option is active and die is not a noExplode bonus die
+    if (document.getElementById('expl').checked && !currentDice[index].noExplode) {
+        rollExtra();
+    }
     render();
 }
 
@@ -545,7 +607,7 @@ function cancelBonusFree() {
 }
 function applyBonusFree(index) {
     if (bonusFreeLeft <= 0) { cancelBonusFree(); render(); return; }
-    currentDice[index].val += 1;
+    // boost raises effectiveVal, not natural (no extra explosion triggered here)
     currentDice[index].boost = (currentDice[index].boost || 0) + 1;
     bonusFreeLeft--;
     if (bonusFreeLeft <= 0) {
@@ -577,7 +639,15 @@ function toggleAdvanced() {
 
 // ─── PARTITION ALGORITHM (greedy, no recursion, safe at any scale) ────────
 function findBestPartition(diceVals, targetMode, doubleInc, only15) {
-    const sorted = [...diceVals].sort((a, b) => b - a);
+    const lupo      = document.getElementById('lupoDiMare').checked;
+    const sbarrBool = document.getElementById('sbarramento').checked;
+
+    // Lupo di Mare: treat 9s as 10s for set calculation
+    // Fuoco di Sbarramento: even-numbered dice cannot be used in sets
+    let filtered = diceVals.map(v => lupo && v === 9 ? 10 : v);
+    if (sbarrBool) filtered = filtered.filter(v => v % 2 !== 0); // remove even dice
+
+    const sorted = [...filtered].sort((a, b) => b - a);
     const used   = new Array(sorted.length).fill(false);
     const sets   = [];
 
@@ -605,10 +675,15 @@ function findBestPartition(diceVals, targetMode, doubleInc, only15) {
         }
     }
 
-    if (targetMode === 15 || only15) {
+    if (only15) {
+        // Malus: only sets of 15, but they count as 1 raise (not 2)
+        greedyPass(15, 1);
+    } else if (targetMode === 15) {
+        // Skill rank 4+: sets of 15 = 2 raises, leftover sets of 10 = 1 raise
         greedyPass(15, 2);
-        if (!only15) greedyPass(10, 1);
+        greedyPass(10, 1);
     } else {
+        // Standard: sets of 10 = 1 raise
         greedyPass(10, 1);
     }
 
@@ -663,12 +738,16 @@ function render() {
 
         const extBadge   = d.exploded ? `<span class="ext-badge">${t.extBadge}</span>` : '';
         const boostBadge = d.boost > 0 ? `<span class="boost-badge">+${d.boost}</span>` : '';
-        html += `<div class="${cls}" onclick="toggleSelect(${i})">${d.val}${extBadge}${boostBadge}</div>`;
+        const lockBadge  = d.noExplode ? `<span class="lock-badge">🔒</span>` : '';
+        if (d.noExplode) cls += ' no-explode';
+        // Show natural value; if static bonus active, show "N+b" label for clarity
+        const bonusLabel = (d.bonus > 0) ? `<span class="bonus-label">+${d.bonus}</span>` : '';
+        html += `<div class="${cls}" onclick="toggleSelect(${i})">${d.natural}${bonusLabel}${extBadge}${boostBadge}${lockBadge}</div>`;
     });
     html += '</div>';
 
     // Partition
-    const result   = findBestPartition(currentDice.map(d => d.val), target, double, only15);
+    const result   = findBestPartition(currentDice.map(d => effectiveVal(d)), target, double, only15);
     const incWord  = result.totalIncrements === 1 ? t.summaryOne : t.summaryMany;
     html += `<div class="summary-box">${result.totalIncrements} ${incWord}</div>`;
 
