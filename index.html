@@ -9,6 +9,7 @@
             --primary: #38bdf8; --bg: #f8fafc; --card: #ffffff; 
             --accent: #f59e0b; --success: #10b981; --text: #1e293b;
             --border: #e2e8f0; --input-bg: #f1f5f9; --footer: rgba(0,0,0,0.6);
+            --danger: #ef4444; --purple: #a855f7;
         }
         [data-theme="dark"] { 
             --bg: #0f172a; --card: #1e293b; --text: #f8fafc;
@@ -23,20 +24,17 @@
             width: 100%; max-width: 380px; display: flex; 
             justify-content: space-between; align-items: center; margin-bottom: 10px; 
         }
-
-        /* Language selector */
         .lang-selector { position: relative; }
         .lang-btn {
             background: var(--card); border: 2px solid var(--border); color: var(--text);
             padding: 6px 12px; border-radius: 12px; cursor: pointer; font-weight: bold;
-            font-size: 0.85rem; display: flex; align-items: center; gap: 6px;
-            white-space: nowrap;
+            font-size: 0.85rem; display: flex; align-items: center; gap: 6px; white-space: nowrap;
         }
         .lang-btn:hover { border-color: var(--primary); }
         .lang-dropdown {
             display: none; position: absolute; top: calc(100% + 6px); left: 0;
             background: var(--card); border: 2px solid var(--border); border-radius: 12px;
-            overflow: hidden; z-index: 100; min-width: 130px;
+            overflow: hidden; z-index: 100; min-width: 140px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
         .lang-dropdown.open { display: block; }
@@ -46,42 +44,98 @@
         }
         .lang-option:hover { background: var(--input-bg); }
         .lang-option.active { color: var(--primary); }
-
         .theme-toggle { 
             background: var(--card); border: 2px solid var(--border); color: var(--text); 
             padding: 6px 12px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 0.75rem; 
         }
-        
-        .card { background: var(--card); padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 380px; box-sizing: border-box; border: 1px solid var(--border); }
+
+        /* Cards */
+        .card { background: var(--card); padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 380px; box-sizing: border-box; border: 1px solid var(--border); margin-bottom: 12px; }
+        .card-title { font-size: 0.7rem; color: var(--purple); text-transform: uppercase; font-weight: 900; letter-spacing: 1.5px; margin: 0 0 14px 0; display: flex; align-items: center; gap: 6px; }
+
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
         label { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 800; }
         input[type="number"], select { width: 100%; padding: 12px; background: var(--input-bg); border: 2px solid var(--border); border-radius: 12px; color: var(--text); font-size: 1rem; margin-top: 5px; box-sizing: border-box; outline: none; }
-        
+
         .bonus-section { background: var(--input-bg); border: 2px solid var(--border); padding: 12px; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
         .bonus-section span { font-size: 0.85rem; font-weight: 600; }
         .bonus-section select { width: auto; margin-top: 0; padding: 5px 10px; }
 
-        .option-tile { display: flex; align-items: center; background: var(--input-bg); border: 2px solid var(--border); padding: 12px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; font-size: 0.85rem; }
-        .option-tile.active { border-color: var(--primary); background: rgba(56, 189, 248, 0.1); }
-        
-        button.main-btn { width: 100%; padding: 18px; background: var(--primary); color: #0f172a; border: none; border-radius: 15px; font-weight: 800; font-size: 1.1rem; margin-top: 10px; cursor: pointer; }
+        .option-tile { display: flex; align-items: center; gap: 10px; background: var(--input-bg); border: 2px solid var(--border); padding: 12px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
+        .option-tile input[type="checkbox"] { width: auto; margin: 0; padding: 0; accent-color: var(--primary); width: 16px; height: 16px; cursor: pointer; }
+        .option-tile.active { border-color: var(--primary); background: rgba(56,189,248,0.1); }
+        .option-tile.active-danger { border-color: var(--danger); background: rgba(239,68,68,0.1); }
+        .option-tile.active-purple { border-color: var(--purple); background: rgba(168,85,247,0.1); }
+
+        button.main-btn { width: 100%; padding: 18px; background: var(--primary); color: #0f172a; border: none; border-radius: 15px; font-weight: 800; font-size: 1.1rem; margin-top: 10px; cursor: pointer; transition: opacity 0.2s; }
+        button.main-btn:hover { opacity: 0.88; }
         button.reroll { width: 100%; padding: 12px; background: var(--accent); margin-top: 8px; display: none; color: #0f172a; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
 
-        .summary-box { background: var(--primary); color: #0f172a; padding: 18px; border-radius: 15px; text-align: center; margin: 20px 0; font-weight: 900; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3); width: 100%; max-width: 380px; box-sizing: border-box; }
+        /* Results */
+        .summary-box { background: var(--primary); color: #0f172a; padding: 18px; border-radius: 15px; text-align: center; margin: 20px 0; font-weight: 900; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(56,189,248,0.3); width: 100%; max-width: 380px; box-sizing: border-box; }
         #results { width: 100%; max-width: 380px; }
-        
-        .die { display: inline-flex; width: 45px; height: 45px; align-items: center; justify-content: center; background: var(--input-bg); border: 2px solid var(--primary); border-radius: 10px; margin: 5px; font-weight: bold; font-size: 1.2rem; cursor: pointer; position: relative; color: var(--text); }
+
+        .die { display: inline-flex; width: 45px; height: 45px; align-items: center; justify-content: center; background: var(--input-bg); border: 2px solid var(--primary); border-radius: 10px; margin: 5px; font-weight: bold; font-size: 1.1rem; cursor: pointer; position: relative; color: var(--text); transition: transform 0.1s, box-shadow 0.1s; user-select: none; }
         .die.selected { border-color: var(--accent); transform: scale(1.15); box-shadow: 0 0 15px var(--accent); }
-        .ext-badge { position: absolute; top: -5px; right: -5px; background: var(--accent); color: #000; font-size: 0.6rem; padding: 2px 4px; border-radius: 4px; }
-        
-        .set { background: rgba(16, 185, 129, 0.1); border-left: 5px solid var(--success); padding: 14px; border-radius: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; color: var(--text); }
-        .set-15 { border-left-color: var(--primary); background: rgba(56, 189, 248, 0.1); }
-        .set-10 { border-left-color: var(--accent); background: rgba(245, 158, 11, 0.1); }
-        
+        /* Forza10 mode */
+        .die.force10-mode { border-color: var(--danger); cursor: crosshair; }
+        .die.force10-mode:hover { box-shadow: 0 0 12px var(--danger); transform: scale(1.1); }
+        /* Bonus distribution mode */
+        .die.bonus-mode { border-color: var(--purple); cursor: pointer; }
+        .die.bonus-mode:hover { box-shadow: 0 0 12px var(--purple); transform: scale(1.1); }
+        .die.boosted { border-color: var(--purple); }
+
+        .ext-badge { position: absolute; top: -5px; right: -5px; background: var(--accent); color: #000; font-size: 0.55rem; padding: 2px 4px; border-radius: 4px; font-weight: 900; }
+        .boost-badge { position: absolute; bottom: -5px; right: -5px; background: var(--purple); color: #fff; font-size: 0.55rem; padding: 2px 4px; border-radius: 4px; font-weight: 900; }
+
+        .set { background: rgba(16,185,129,0.1); border-left: 5px solid var(--success); padding: 14px; border-radius: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; color: var(--text); }
+        .set-15 { border-left-color: var(--primary); background: rgba(56,189,248,0.1); }
+        .set-10 { border-left-color: var(--accent); background: rgba(245,158,11,0.1); }
+
         .inc-badge { background: var(--text); color: var(--card); padding: 2px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: 800; }
-        .waste { background: rgba(239, 68, 68, 0.1); border-left: 5px solid #ef4444; padding: 12px; border-radius: 12px; color: #ef4444; font-weight: bold; margin-top: 10px; }
+        .waste { background: rgba(239,68,68,0.1); border-left: 5px solid var(--danger); padding: 12px; border-radius: 12px; color: var(--danger); font-weight: bold; margin-top: 10px; }
+        .gioia-hint { background: rgba(168,85,247,0.1); border-left: 5px solid var(--purple); padding: 12px; border-radius: 12px; color: var(--purple); font-weight: bold; margin-top: 8px; font-size: 0.85rem; }
 
         h3 { font-size: 0.75rem; color: var(--primary); text-transform: uppercase; margin: 25px 0 10px 0; letter-spacing: 1px; }
+
+        /* Manipolazione Riserva */
+        .riserva-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .riserva-row button { flex: 1; padding: 11px 8px; border: none; border-radius: 12px; font-weight: 700; font-size: 0.8rem; cursor: pointer; transition: opacity 0.2s; }
+        .riserva-row button:hover { opacity: 0.85; }
+        .btn-force10 { background: var(--danger); color: #fff; }
+        .btn-force10.active { box-shadow: 0 0 0 3px rgba(239,68,68,0.4); }
+        .bonus-dist-row { display: flex; align-items: center; gap: 8px; }
+        .bonus-dist-row input[type="number"] { width: 70px; flex-shrink: 0; padding: 10px; font-size: 0.95rem; margin-top: 0; }
+        .bonus-dist-row button { flex: 1; padding: 11px 8px; background: var(--purple); color: #fff; border: none; border-radius: 12px; font-weight: 700; font-size: 0.8rem; cursor: pointer; transition: opacity 0.2s; }
+        .bonus-dist-row button:hover { opacity: 0.85; }
+        .bonus-dist-row button.active { box-shadow: 0 0 0 3px rgba(168,85,247,0.4); }
+        .bonus-remaining { font-size: 0.75rem; color: var(--purple); font-weight: 800; text-align: center; margin-top: 4px; display: none; }
+
+        /* Abilità & Manipolazioni toggle */
+        .advanced-toggle {
+            width: 100%; max-width: 380px; box-sizing: border-box;
+            display: flex; align-items: center; justify-content: space-between;
+            background: var(--card); border: 2px solid var(--border);
+            border-radius: 14px; padding: 12px 16px; cursor: pointer;
+            margin-bottom: 12px; transition: border-color 0.2s, border-radius 0.25s;
+            font-size: 0.8rem; font-weight: 800; color: var(--purple);
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .advanced-toggle:hover { border-color: var(--purple); }
+        .advanced-toggle.open { border-color: var(--purple); background: rgba(168,85,247,0.08); border-radius: 14px 14px 0 0; border-bottom: none; margin-bottom: 0; }
+        .advanced-toggle .toggle-arrow { transition: transform 0.25s; font-size: 0.75rem; }
+        .advanced-toggle.open .toggle-arrow { transform: rotate(180deg); }
+
+        .advanced-panel {
+            width: 100%; max-width: 380px; box-sizing: border-box;
+            background: var(--card); border: 2px solid var(--purple);
+            border-top: none; border-radius: 0 0 14px 14px;
+            overflow: hidden; max-height: 0;
+            transition: max-height 0.35s ease, padding 0.35s ease;
+            padding: 0 20px; margin-bottom: 0;
+        }
+        .advanced-panel.open { max-height: 700px; padding: 16px 20px 20px; margin-bottom: 12px; }
+
         .footer-noemi { text-align: center; padding: 40px 10px; font-size: 0.85em; color: var(--footer); width: 100%; }
         .link-noemi { color: inherit; text-decoration: none; font-weight: 600; border-bottom: 1px solid currentColor; }
     </style>
@@ -89,7 +143,6 @@
 <body data-theme="dark">
 
     <div class="header-tools">
-        <!-- Language selector -->
         <div class="lang-selector" id="langSelector">
             <button class="lang-btn" onclick="toggleLangDropdown()" id="langBtn">
                 <span id="currentFlag">🇮🇹</span>
@@ -104,10 +157,10 @@
                 <div class="lang-option" onclick="setLang('es')">🇪🇸 ES — Español</div>
             </div>
         </div>
-
         <div class="theme-toggle" onclick="toggleTheme()" id="themeBtn">TEMA 🌓</div>
     </div>
 
+    <!-- MAIN ROLL CARD -->
     <div class="card">
         <div class="grid">
             <div><label id="lbl-count">N. Dadi</label><input type="number" id="count" value="5" min="1"></div>
@@ -132,13 +185,62 @@
             </select>
         </div>
 
-        <label class="option-tile" id="tile2">
-            <input type="checkbox" id="expl" onchange="uS('tile2', this)">
+        <!-- Esplosione (sempre visibile) -->
+        <label class="option-tile" id="tile-expl" onclick="toggleTile('tile-expl','expl')">
+            <input type="checkbox" id="expl">
             <span id="lbl-explode">Esplosione del 10</span>
         </label>
-        
+
         <button class="main-btn" onclick="firstRoll()" id="btn-roll">LANCIA DADI</button>
         <button id="rerollBtn" class="reroll" onclick="rerollSelected()">RILANCIA SELEZIONATO</button>
+    </div>
+
+    <!-- ABILITÀ & MANIPOLAZIONI TOGGLE -->
+    <div class="advanced-toggle" id="advancedToggle" onclick="toggleAdvanced()">
+        <span id="lbl-advanced">⚔️ Abilità &amp; Manipolazioni</span>
+        <span class="toggle-arrow">▼</span>
+    </div>
+
+    <!-- ADVANCED PANEL -->
+    <div class="advanced-panel" id="advancedPanel">
+
+        <!-- Set da 10 = 2 Incrementi -->
+        <label class="option-tile" id="tile-double" onclick="toggleTile('tile-double','doubleInc')">
+            <input type="checkbox" id="doubleInc" onchange="render()">
+            <span id="lbl-double">Set da 10 = 2 Incrementi</span>
+        </label>
+
+        <!-- Solo Set da 15 -->
+        <label class="option-tile" id="tile-only15" onclick="toggleTile('tile-only15','only15')">
+            <input type="checkbox" id="only15" onchange="onOnly15Change()">
+            <span id="lbl-only15">Malus: Solo Set da 15</span>
+        </label>
+
+        <!-- Gioia di Vivere -->
+        <label class="option-tile" id="tile-gioia" onclick="toggleTile('tile-gioia','gioia')">
+            <input type="checkbox" id="gioia" onchange="render()">
+            <span id="lbl-gioia">Gioia di Vivere (+1 virtuale agli scarti)</span>
+        </label>
+
+        <!-- MANIPOLAZIONE RISERVA -->
+        <div style="margin-top:6px;">
+            <div class="card-title" style="margin-bottom:10px;">⚙️ <span id="lbl-riserva">Manipolazione Riserva</span></div>
+
+            <div class="riserva-row" id="riservaRow" style="display:none;">
+                <button class="btn-force10" id="btnForce10" onclick="toggleForce10()">
+                    <span id="lbl-force10">💪 Forza un 10 (Indomabile)</span>
+                </button>
+            </div>
+
+            <div class="bonus-dist-row" id="bonusFreeRow" style="display:none;">
+                <input type="number" id="bonusFreeVal" value="2" min="1" max="99">
+                <button id="btnBonusFree" onclick="toggleBonusFree()">
+                    <span id="lbl-bonusfree">✨ Distribuisci +X sui dadi</span>
+                </button>
+            </div>
+            <div class="bonus-remaining" id="bonusRemaining"></div>
+            <div id="riservaHint" style="font-size:0.75rem;color:#94a3b8;text-align:center;padding:8px 0;" id="lbl-riserva-hint">Lancia i dadi per usare la Riserva</div>
+        </div>
     </div>
 
     <div id="results"></div>
@@ -147,382 +249,455 @@
         <p id="footer-text">Progetto e idea di <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a></p>
     </footer>
 
-    <script>
-        // ─────────────────────────────────────────────
-        // TRANSLATIONS
-        // Terminology follows official 7th Sea localizations:
-        //   IT: "Incremento" (official Italian edition)
-        //   EN: "Raise" (original English edition)
-        //   FR: "Relance" (official French edition)
-        //   DE: "Erfolg" (official German edition, literally "success/raise")
-        //   ES: "Aumento" (official Spanish edition)
-        // ─────────────────────────────────────────────
-        const LANGS = {
-            it: {
-                flag: '🇮🇹', code: 'IT',
-                themeBtn: 'TEMA 🌓',
-                lblCount: 'N. Dadi',
-                lblTarget: 'Obiettivo',
-                opt10: 'Somma 10',
-                opt15: 'Somma 15 (+10)',
-                lblBonus: 'Aggiungi bonus a ogni dado:',
-                lblExplode: 'Esplosione del 10',
-                btnRoll: 'LANCIA DADI',
-                btnReroll: 'RILANCIA SELEZIONATO',
-                h3Dice: 'Dadi Lanciati',
-                h3Combos: 'Combinazioni',
-                h3Discards: 'Scarti',
-                summaryOne: 'INCREMENTO',
-                summaryMany: 'INCREMENTI',
-                incLabel: 'INC',
-                wasteLabel: 'Scarti',
-                extBadge: 'EXT',
-                footer: 'Progetto e idea di <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
-            },
-            en: {
-                flag: '🇬🇧', code: 'EN',
-                themeBtn: 'THEME 🌓',
-                lblCount: 'No. of Dice',
-                lblTarget: 'Target',
-                opt10: 'Sum 10',
-                opt15: 'Sum 15 (+10)',
-                lblBonus: 'Add bonus to each die:',
-                lblExplode: 'Exploding 10s',
-                btnRoll: 'ROLL DICE',
-                btnReroll: 'REROLL SELECTED',
-                h3Dice: 'Dice Rolled',
-                h3Combos: 'Combinations',
-                h3Discards: 'Discards',
-                summaryOne: 'RAISE',
-                summaryMany: 'RAISES',
-                incLabel: 'RAISE',
-                wasteLabel: 'Unused',
-                extBadge: 'EXP',
-                footer: 'Design & concept by <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
-            },
-            fr: {
-                flag: '🇫🇷', code: 'FR',
-                themeBtn: 'THÈME 🌓',
-                lblCount: 'Nb. de Dés',
-                lblTarget: 'Objectif',
-                opt10: 'Somme 10',
-                opt15: 'Somme 15 (+10)',
-                lblBonus: 'Ajouter un bonus à chaque dé :',
-                lblExplode: 'Explosion du 10',
-                btnRoll: 'LANCER LES DÉS',
-                btnReroll: 'RELANCER LE DÉ SÉLECTIONNÉ',
-                h3Dice: 'Dés Lancés',
-                h3Combos: 'Combinaisons',
-                h3Discards: 'Rebus',
-                summaryOne: 'RELANCE',
-                summaryMany: 'RELANCES',
-                incLabel: 'REL',
-                wasteLabel: 'Rebus',
-                extBadge: 'EXP',
-                footer: 'Projet et idée de <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
-            },
-            de: {
-                flag: '🇩🇪', code: 'DE',
-                themeBtn: 'THEMA 🌓',
-                lblCount: 'Anzahl Würfel',
-                lblTarget: 'Zielwert',
-                opt10: 'Summe 10',
-                opt15: 'Summe 15 (+10)',
-                lblBonus: 'Bonus pro Würfel hinzufügen:',
-                lblExplode: 'Explodierender 10er',
-                btnRoll: 'WÜRFELN',
-                btnReroll: 'AUSGEWÄHLTEN NEU WÜRFELN',
-                h3Dice: 'Gewürfelte Würfel',
-                h3Combos: 'Kombinationen',
-                h3Discards: 'Abwürfe',
-                summaryOne: 'ERFOLG',
-                summaryMany: 'ERFOLGE',
-                incLabel: 'ERF',
-                wasteLabel: 'Abwürfe',
-                extBadge: 'EXP',
-                footer: 'Projekt und Idee von <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
-            },
-            es: {
-                flag: '🇪🇸', code: 'ES',
-                themeBtn: 'TEMA 🌓',
-                lblCount: 'N.º de Dados',
-                lblTarget: 'Objetivo',
-                opt10: 'Suma 10',
-                opt15: 'Suma 15 (+10)',
-                lblBonus: 'Añadir bonificación a cada dado:',
-                lblExplode: 'Explosión del 10',
-                btnRoll: 'LANZAR DADOS',
-                btnReroll: 'RELANZAR SELECCIONADO',
-                h3Dice: 'Dados Lanzados',
-                h3Combos: 'Combinaciones',
-                h3Discards: 'Descartes',
-                summaryOne: 'AUMENTO',
-                summaryMany: 'AUMENTOS',
-                incLabel: 'AUM',
-                wasteLabel: 'Descartes',
-                extBadge: 'EXP',
-                footer: 'Proyecto e idea de <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
+<script>
+// ─── TRANSLATIONS ────────────────────────────────────────────────────────────
+// IT: "Incremento" | EN: "Raise" | FR: "Relance" | DE: "Erfolg" | ES: "Aumento"
+const LANGS = {
+    it: {
+        flag:'🇮🇹', code:'IT', themeBtn:'TEMA 🌓',
+        lblCount:'N. Dadi', lblTarget:'Obiettivo',
+        opt10:'Somma 10', opt15:'Somma 15 (+10)',
+        lblBonus:'Aggiungi bonus a ogni dado:',
+        lblExplode:'Esplosione del 10',
+        lblDouble:'Set da 10 = 2 Incrementi',
+        lblOnly15:'Malus: Solo Set da 15',
+        lblGioia:'Gioia di Vivere (+1 virtuale agli scarti)',
+        lblRiserva:'Manipolazione Riserva',
+        lblForce10:'💪 Forza un 10 (Indomabile)',
+        lblBonusFree:'✨ Distribuisci +X sui dadi',
+        lblBonusRem:'Bonus rimasto:',
+        btnRoll:'LANCIA DADI', btnReroll:'RILANCIA SELEZIONATO',
+        h3Dice:'Dadi Lanciati', h3Combos:'Combinazioni', h3Discards:'Scarti',
+        summaryOne:'INCREMENTO', summaryMany:'INCREMENTI', incLabel:'INC',
+        wasteLabel:'Scarti', extBadge:'EXT',
+        gioiaHint:'Gioia di Vivere: aggiungendo +1 a',
+        gioiaSuffix:'raggiungeresti un ulteriore set!',
+        lblAdvanced:'⚔️ Abilità & Manipolazioni',
+        footer:'Progetto e idea di <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
+    },
+    en: {
+        flag:'🇬🇧', code:'EN', themeBtn:'THEME 🌓',
+        lblCount:'No. of Dice', lblTarget:'Target',
+        opt10:'Sum 10', opt15:'Sum 15 (+10)',
+        lblBonus:'Add bonus to each die:',
+        lblExplode:'Exploding 10s',
+        lblDouble:'Set of 10 = 2 Raises',
+        lblOnly15:'Malus: Only Sets of 15',
+        lblGioia:'Joie de Vivre (+1 virtual to discards)',
+        lblRiserva:'Reserve Manipulation',
+        lblForce10:'💪 Force a 10 (Indomitable)',
+        lblBonusFree:'✨ Distribute +X on dice',
+        lblBonusRem:'Bonus remaining:',
+        btnRoll:'ROLL DICE', btnReroll:'REROLL SELECTED',
+        h3Dice:'Dice Rolled', h3Combos:'Combinations', h3Discards:'Discards',
+        summaryOne:'RAISE', summaryMany:'RAISES', incLabel:'RAISE',
+        wasteLabel:'Unused', extBadge:'EXP',
+        gioiaHint:'Joie de Vivre: adding +1 to',
+        gioiaSuffix:'would complete an extra set!',
+        lblAdvanced:'⚔️ Abilities & Manipulations',
+        footer:'Design & concept by <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
+    },
+    fr: {
+        flag:'🇫🇷', code:'FR', themeBtn:'THÈME 🌓',
+        lblCount:'Nb. de Dés', lblTarget:'Objectif',
+        opt10:'Somme 10', opt15:'Somme 15 (+10)',
+        lblBonus:'Ajouter un bonus à chaque dé :',
+        lblExplode:'Explosion du 10',
+        lblDouble:'Combinaison de 10 = 2 Relances',
+        lblOnly15:'Malus : Seulement Combinaisons de 15',
+        lblGioia:'Joie de Vivre (+1 virtuel aux rebuts)',
+        lblRiserva:'Manipulation de Réserve',
+        lblForce10:'💪 Forcer un 10 (Indomptable)',
+        lblBonusFree:'✨ Distribuer +X sur les dés',
+        lblBonusRem:'Bonus restant :',
+        btnRoll:'LANCER LES DÉS', btnReroll:'RELANCER LE DÉ SÉLECTIONNÉ',
+        h3Dice:'Dés Lancés', h3Combos:'Combinaisons', h3Discards:'Rebus',
+        summaryOne:'RELANCE', summaryMany:'RELANCES', incLabel:'REL',
+        wasteLabel:'Rebus', extBadge:'EXP',
+        gioiaHint:'Joie de Vivre : en ajoutant +1 à',
+        gioiaSuffix:'vous compléteriez une relance supplémentaire !',
+        lblAdvanced:'⚔️ Capacités & Manipulations',
+        footer:'Projet et idée de <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
+    },
+    de: {
+        flag:'🇩🇪', code:'DE', themeBtn:'THEMA 🌓',
+        lblCount:'Anzahl Würfel', lblTarget:'Zielwert',
+        opt10:'Summe 10', opt15:'Summe 15 (+10)',
+        lblBonus:'Bonus pro Würfel hinzufügen:',
+        lblExplode:'Explodierender 10er',
+        lblDouble:'10er-Gruppe = 2 Erfolge',
+        lblOnly15:'Malus: Nur 15er-Gruppen',
+        lblGioia:'Lebensfreude (+1 virtuell auf Abwürfe)',
+        lblRiserva:'Reservenmanipulation',
+        lblForce10:'💪 Eine 10 erzwingen (Unbezähmbar)',
+        lblBonusFree:'✨ +X auf Würfel verteilen',
+        lblBonusRem:'Verbleibender Bonus:',
+        btnRoll:'WÜRFELN', btnReroll:'AUSGEWÄHLTEN NEU WÜRFELN',
+        h3Dice:'Gewürfelte Würfel', h3Combos:'Kombinationen', h3Discards:'Abwürfe',
+        summaryOne:'ERFOLG', summaryMany:'ERFOLGE', incLabel:'ERF',
+        wasteLabel:'Abwürfe', extBadge:'EXP',
+        gioiaHint:'Lebensfreude: +1 auf',
+        gioiaSuffix:'würde eine weitere Gruppe ergeben!',
+        lblAdvanced:'⚔️ Fähigkeiten & Manipulationen',
+        footer:'Projekt und Idee von <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
+    },
+    es: {
+        flag:'🇪🇸', code:'ES', themeBtn:'TEMA 🌓',
+        lblCount:'N.º de Dados', lblTarget:'Objetivo',
+        opt10:'Suma 10', opt15:'Suma 15 (+10)',
+        lblBonus:'Añadir bonificación a cada dado:',
+        lblExplode:'Explosión del 10',
+        lblDouble:'Combinación de 10 = 2 Aumentos',
+        lblOnly15:'Malus: Solo Combinaciones de 15',
+        lblGioia:'Alegría de Vivir (+1 virtual a descartes)',
+        lblRiserva:'Manipulación de Reserva',
+        lblForce10:'💪 Forzar un 10 (Indomable)',
+        lblBonusFree:'✨ Distribuir +X en dados',
+        lblBonusRem:'Bonus restante:',
+        btnRoll:'LANZAR DADOS', btnReroll:'RELANZAR SELECCIONADO',
+        h3Dice:'Dados Lanzados', h3Combos:'Combinaciones', h3Discards:'Descartes',
+        summaryOne:'AUMENTO', summaryMany:'AUMENTOS', incLabel:'AUM',
+        wasteLabel:'Descartes', extBadge:'EXP',
+        gioiaHint:'Alegría de Vivir: añadiendo +1 a',
+        gioiaSuffix:'¡completarías un conjunto extra!',
+        lblAdvanced:'⚔️ Habilidades & Manipulaciones',
+        footer:'Proyecto e idea de <a href="mailto:noemi.marcolini@gmail.com" class="link-noemi">Noemi Marcolini</a>',
+    }
+};
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let currentLang    = 'it';
+let currentDice    = [];       // [{val, natural, exploded, selected, boost}]
+let rerollAvailable = true;
+let force10Mode    = false;    // Indomabile mode
+let bonusFreeMode  = false;    // Distribuisci +X mode
+let bonusFreeLeft  = 0;
+
+// ─── LANGUAGE ────────────────────────────────────────────────────────────────
+function toggleLangDropdown() {
+    document.getElementById('langDropdown').classList.toggle('open');
+}
+document.addEventListener('click', e => {
+    if (!document.getElementById('langSelector').contains(e.target))
+        document.getElementById('langDropdown').classList.remove('open');
+});
+
+function setLang(lang) {
+    currentLang = lang;
+    const t = LANGS[lang];
+    document.getElementById('currentFlag').textContent = t.flag;
+    document.getElementById('currentLangCode').textContent = t.code;
+    document.querySelectorAll('.lang-option').forEach(el =>
+        el.classList.toggle('active', el.textContent.includes(t.code))
+    );
+    document.getElementById('themeBtn').textContent       = t.themeBtn;
+    document.getElementById('lbl-count').textContent      = t.lblCount;
+    document.getElementById('lbl-target').textContent     = t.lblTarget;
+    document.getElementById('opt-10').textContent         = t.opt10;
+    document.getElementById('opt-15').textContent         = t.opt15;
+    document.getElementById('lbl-bonus').textContent      = t.lblBonus;
+    document.getElementById('lbl-explode').textContent    = t.lblExplode;
+    document.getElementById('lbl-double').textContent     = t.lblDouble;
+    document.getElementById('lbl-only15').textContent     = t.lblOnly15;
+    document.getElementById('lbl-gioia').textContent      = t.lblGioia;
+    document.getElementById('lbl-riserva').textContent    = t.lblRiserva;
+    document.getElementById('lbl-force10').textContent    = t.lblForce10;
+    document.getElementById('lbl-bonusfree').textContent  = t.lblBonusFree;
+    document.getElementById('rerollBtn').textContent      = t.btnReroll;
+    document.getElementById('btn-roll').textContent       = t.btnRoll;
+    document.getElementById('footer-text').innerHTML      = t.footer;
+    document.getElementById('lbl-advanced').textContent     = t.lblAdvanced;
+    document.getElementById('langDropdown').classList.remove('open');
+    if (currentDice.length > 0) render();
+}
+
+// ─── THEME ───────────────────────────────────────────────────────────────────
+function toggleTheme() {
+    const b = document.body;
+    b.setAttribute('data-theme', b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+}
+
+// ─── OPTION TILES ────────────────────────────────────────────────────────────
+function toggleTile(tileId, cbId) {
+    const cb = document.getElementById(cbId);
+    cb.checked = !cb.checked;
+    cb.dispatchEvent(new Event('change'));
+    updateTileStyle(tileId, cb.checked, cbId);
+}
+function updateTileStyle(tileId, checked, cbId) {
+    const tile = document.getElementById(tileId);
+    tile.classList.remove('active','active-danger','active-purple');
+    if (!checked) return;
+    if (cbId === 'only15') tile.classList.add('active-danger');
+    else if (cbId === 'gioia') tile.classList.add('active-purple');
+    else tile.classList.add('active');
+}
+function onOnly15Change() {
+    const cb = document.getElementById('only15');
+    updateTileStyle('tile-only15', cb.checked, 'only15');
+    // If only15 is on, disable target selector (force 15 logic internally)
+    render();
+}
+
+// ─── DICE LOGIC ──────────────────────────────────────────────────────────────
+function rollSingle(isExtra = false) {
+    const bonus = parseInt(document.getElementById('bonusValue').value) || 0;
+    const r = Math.floor(Math.random() * 10) + 1;
+    return { val: r + bonus, natural: r, exploded: isExtra, selected: false, boost: 0 };
+}
+
+function firstRoll() {
+    // Reset all modes
+    cancelForce10();
+    cancelBonusFree();
+    rerollAvailable = true;
+    const n = Math.max(1, parseInt(document.getElementById('count').value) || 1);
+    document.getElementById('count').value = n;
+    currentDice = [];
+    for (let i = 0; i < n; i++) {
+        const d = rollSingle(false);
+        currentDice.push(d);
+        if (document.getElementById('expl').checked && d.natural === 10) rollExtra();
+    }
+    document.getElementById('riservaRow').style.display = 'flex';
+    document.getElementById('bonusFreeRow').style.display = 'flex';
+    const hint = document.getElementById('riservaHint');
+    if (hint) hint.style.display = 'none';
+    render();
+}
+
+function rollExtra() {
+    const extra = rollSingle(true);
+    currentDice.push(extra);
+    if (extra.natural === 10) rollExtra();
+}
+
+function toggleSelect(index) {
+    if (force10Mode) { applyForce10(index); return; }
+    if (bonusFreeMode) { applyBonusFree(index); return; }
+    if (!rerollAvailable) return;
+    const was = currentDice[index].selected;
+    currentDice.forEach(d => d.selected = false);
+    currentDice[index].selected = !was;
+    render();
+}
+
+function rerollSelected() {
+    if (!rerollAvailable) return;
+    const idx = currentDice.findIndex(d => d.selected);
+    if (idx !== -1) {
+        currentDice.splice(idx, 1);
+        const d = rollSingle(false);
+        currentDice.push(d);
+        if (document.getElementById('expl').checked && d.natural === 10) rollExtra();
+        rerollAvailable = false;
+    }
+    render();
+}
+
+// ─── FORZA UN 10 (Indomabile) ─────────────────────────────────────────────
+function toggleForce10() {
+    if (currentDice.length === 0) return;
+    force10Mode = !force10Mode;
+    if (force10Mode) cancelBonusFree();
+    document.getElementById('btnForce10').classList.toggle('active', force10Mode);
+    render();
+}
+function cancelForce10() {
+    force10Mode = false;
+    const btn = document.getElementById('btnForce10');
+    if (btn) btn.classList.remove('active');
+}
+function applyForce10(index) {
+    // Set die to 10 (no explosion, as per spec)
+    currentDice[index].val = 10;
+    currentDice[index].natural = 10;
+    currentDice[index].boost = 0;
+    force10Mode = false;
+    document.getElementById('btnForce10').classList.remove('active');
+    render();
+}
+
+// ─── DISTRIBUISCI +X ──────────────────────────────────────────────────────
+function toggleBonusFree() {
+    if (currentDice.length === 0) return;
+    bonusFreeMode = !bonusFreeMode;
+    if (bonusFreeMode) {
+        cancelForce10();
+        bonusFreeLeft = Math.max(1, parseInt(document.getElementById('bonusFreeVal').value) || 1);
+        document.getElementById('bonusFreeVal').disabled = true;
+    } else {
+        cancelBonusFree();
+    }
+    document.getElementById('btnBonusFree').classList.toggle('active', bonusFreeMode);
+    updateBonusRemaining();
+    render();
+}
+function cancelBonusFree() {
+    bonusFreeMode = false;
+    bonusFreeLeft = 0;
+    const btn = document.getElementById('btnBonusFree');
+    if (btn) btn.classList.remove('active');
+    const inp = document.getElementById('bonusFreeVal');
+    if (inp) inp.disabled = false;
+    const rem = document.getElementById('bonusRemaining');
+    if (rem) rem.style.display = 'none';
+}
+function applyBonusFree(index) {
+    if (bonusFreeLeft <= 0) { cancelBonusFree(); render(); return; }
+    currentDice[index].val += 1;
+    currentDice[index].boost = (currentDice[index].boost || 0) + 1;
+    bonusFreeLeft--;
+    if (bonusFreeLeft <= 0) {
+        bonusFreeMode = false;
+        document.getElementById('btnBonusFree').classList.remove('active');
+        document.getElementById('bonusFreeVal').disabled = false;
+    }
+    updateBonusRemaining();
+    render();
+}
+function updateBonusRemaining() {
+    const rem = document.getElementById('bonusRemaining');
+    const t = LANGS[currentLang];
+    if (bonusFreeMode && bonusFreeLeft > 0) {
+        rem.style.display = 'block';
+        rem.textContent = `${t.lblBonusRem} ${bonusFreeLeft}`;
+    } else {
+        rem.style.display = 'none';
+    }
+}
+
+// ─── ADVANCED PANEL TOGGLE ───────────────────────────────────────────────────
+function toggleAdvanced() {
+    const toggle = document.getElementById('advancedToggle');
+    const panel  = document.getElementById('advancedPanel');
+    toggle.classList.toggle('open');
+    panel.classList.toggle('open');
+}
+
+// ─── PARTITION ALGORITHM (greedy, no recursion, safe at any scale) ────────
+function findBestPartition(diceVals, targetMode, doubleInc, only15) {
+    const sorted = [...diceVals].sort((a, b) => b - a);
+    const used   = new Array(sorted.length).fill(false);
+    const sets   = [];
+
+    function greedyPass(threshold, incValue) {
+        let changed = true;
+        while (changed) {
+            changed = false;
+            const pool = [];
+            for (let i = 0; i < sorted.length; i++) {
+                if (!used[i]) pool.push({ idx: i, val: sorted[i] });
             }
-        };
-
-        let currentLang = 'it';
-        let currentDice = [];
-        let rerollAvailable = true;
-
-        // ─── Language handling ───────────────────────
-        function toggleLangDropdown() {
-            document.getElementById('langDropdown').classList.toggle('open');
+            pool.sort((a, b) => b.val - a.val);
+            let combo = [], sum = 0;
+            for (const p of pool) {
+                combo.push(p);
+                sum += p.val;
+                if (sum >= threshold) break;
+            }
+            if (sum >= threshold) {
+                combo.forEach(c => used[c.idx] = true);
+                const actualInc = doubleInc && threshold === 10 ? incValue * 2 : incValue;
+                sets.push({ v: combo.map(c => c.val), t: sum, type: threshold, inc: actualInc });
+                changed = true;
+            }
         }
+    }
 
-        document.addEventListener('click', function(e) {
-            if (!document.getElementById('langSelector').contains(e.target)) {
-                document.getElementById('langDropdown').classList.remove('open');
-            }
+    if (targetMode === 15 || only15) {
+        greedyPass(15, 2);
+        if (!only15) greedyPass(10, 1);
+    } else {
+        greedyPass(10, 1);
+    }
+
+    const leftovers = sorted.filter((_, i) => !used[i]);
+    const totalIncrements = sets.reduce((acc, s) => acc + s.inc, 0);
+    return { sets, leftovers, totalIncrements };
+}
+
+// ─── GIOIA DI VIVERE ──────────────────────────────────────────────────────
+// Returns index of a leftover die that, with +1, would complete a new set
+function gioiaCheck(leftovers, targetMode, only15) {
+    if (!leftovers.length) return null;
+    const threshold = (targetMode === 15 && !only15) ? 10 : (only15 ? 15 : 10);
+    // Sort leftovers desc, try adding +1 to each and see if any subset reaches threshold
+    const sorted = [...leftovers].sort((a, b) => b - a);
+    // Simple check: can the leftovers sum to threshold-1 already? (so +1 makes it)
+    // More precise: try all subsets up to sum = threshold-1
+    // Since leftovers are usually small, check all non-empty subsets (capped at 20 elements for safety)
+    const cap = Math.min(sorted.length, 20);
+    const sub = sorted.slice(0, cap);
+    for (let mask = 1; mask < (1 << cap); mask++) {
+        let sum = 0;
+        for (let b = 0; b < cap; b++) if (mask & (1 << b)) sum += sub[b];
+        if (sum === threshold - 1) return sum; // +1 would complete it
+    }
+    return null;
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────────────
+function render() {
+    if (currentDice.length === 0) return;
+    const t        = LANGS[currentLang];
+    const target   = parseInt(document.getElementById('target').value);
+    const double   = document.getElementById('doubleInc').checked;
+    const only15   = document.getElementById('only15').checked;
+    const useGioia = document.getElementById('gioia').checked;
+    const resDiv   = document.getElementById('results');
+
+    const anySelected = currentDice.some(d => d.selected);
+    const rerollShow  = rerollAvailable && anySelected && !force10Mode && !bonusFreeMode;
+    document.getElementById('rerollBtn').style.display = rerollShow ? 'block' : 'none';
+    document.getElementById('rerollBtn').textContent   = t.btnReroll;
+
+    // Dice display
+    let html = `<h3>${t.h3Dice}</h3><div style="text-align:center;">`;
+    currentDice.forEach((d, i) => {
+        let cls = 'die';
+        if (force10Mode)   cls += ' force10-mode';
+        else if (bonusFreeMode) cls += ' bonus-mode';
+        else if (d.selected) cls += ' selected';
+        if (d.boost > 0 && !force10Mode && !bonusFreeMode) cls += ' boosted';
+
+        const extBadge   = d.exploded ? `<span class="ext-badge">${t.extBadge}</span>` : '';
+        const boostBadge = d.boost > 0 ? `<span class="boost-badge">+${d.boost}</span>` : '';
+        html += `<div class="${cls}" onclick="toggleSelect(${i})">${d.val}${extBadge}${boostBadge}</div>`;
+    });
+    html += '</div>';
+
+    // Partition
+    const result   = findBestPartition(currentDice.map(d => d.val), target, double, only15);
+    const incWord  = result.totalIncrements === 1 ? t.summaryOne : t.summaryMany;
+    html += `<div class="summary-box">${result.totalIncrements} ${incWord}</div>`;
+
+    if (result.sets.length > 0) {
+        html += `<h3>${t.h3Combos}</h3>`;
+        result.sets.forEach(s => {
+            const cls = s.type === 15 ? 'set-15' : 'set-10';
+            html += `<div class="set ${cls}">
+                        <span>${s.v.join(' + ')} = <b>${s.t}</b></span>
+                        <span class="inc-badge">+${s.inc} ${t.incLabel}</span>
+                     </div>`;
         });
+    }
 
-        function setLang(lang) {
-            currentLang = lang;
-            const t = LANGS[lang];
+    if (result.leftovers.length > 0) {
+        html += `<h3>${t.h3Discards}</h3>
+                 <div class="waste">${t.wasteLabel}: ${result.leftovers.slice().sort((a,b)=>b-a).join(', ')}</div>`;
 
-            // Update flag/code button
-            document.getElementById('currentFlag').textContent = t.flag;
-            document.getElementById('currentLangCode').textContent = t.code;
-
-            // Mark active option
-            document.querySelectorAll('.lang-option').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.lang-option').forEach(el => {
-                if (el.textContent.includes(t.code)) el.classList.add('active');
-            });
-
-            // Update UI text
-            document.getElementById('themeBtn').textContent = t.themeBtn;
-            document.getElementById('lbl-count').textContent = t.lblCount;
-            document.getElementById('lbl-target').textContent = t.lblTarget;
-            document.getElementById('opt-10').textContent = t.opt10;
-            document.getElementById('opt-15').textContent = t.opt15;
-            document.getElementById('lbl-bonus').textContent = t.lblBonus;
-            document.getElementById('lbl-explode').textContent = t.lblExplode;
-            document.getElementById('btn-roll').textContent = t.btnRoll;
-            document.getElementById('rerollBtn').textContent = t.btnReroll;
-            document.getElementById('footer-text').innerHTML = t.footer;
-
-            document.getElementById('langDropdown').classList.remove('open');
-
-            // Re-render results if any
-            if (currentDice.length > 0) render();
-        }
-
-        // ─── Theme ───────────────────────────────────
-        function toggleTheme() {
-            const b = document.body;
-            b.setAttribute('data-theme', b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-        }
-
-        function uS(id, cb) { document.getElementById(id).classList.toggle('active', cb.checked); }
-
-        // ─── Dice logic ──────────────────────────────
-        function rollSingle(isExtra = false) {
-            const bonus = parseInt(document.getElementById('bonusValue').value);
-            const r = Math.floor(Math.random() * 10) + 1;
-            return { val: r + bonus, natural: r, exploded: isExtra, selected: false };
-        }
-
-        function firstRoll() {
-            rerollAvailable = true;
-            const n = Math.max(1, parseInt(document.getElementById('count').value) || 1);
-            document.getElementById('count').value = n;
-            currentDice = [];
-            for (let i = 0; i < n; i++) {
-                let d = rollSingle(false);
-                currentDice.push(d);
-                if (document.getElementById('expl').checked && d.natural === 10) rollExtra();
+        // Gioia di Vivere hint
+        if (useGioia) {
+            const gioiaResult = gioiaCheck(result.leftovers, target, only15);
+            if (gioiaResult !== null) {
+                html += `<div class="gioia-hint">✨ ${t.gioiaHint} ${gioiaResult} → ${gioiaResult+1}: ${t.gioiaSuffix}</div>`;
             }
-            render();
         }
+    }
 
-        function rollExtra() {
-            let extra = rollSingle(true);
-            currentDice.push(extra);
-            if (extra.natural === 10) rollExtra();
-        }
-
-        function toggleSelect(index) {
-            if (!rerollAvailable) return;
-            const wasSelected = currentDice[index].selected;
-            currentDice.forEach(d => d.selected = false);
-            currentDice[index].selected = !wasSelected;
-            render();
-        }
-
-        function rerollSelected() {
-            if (!rerollAvailable) return;
-            let idx = currentDice.findIndex(d => d.selected);
-            if (idx !== -1) {
-                currentDice.splice(idx, 1);
-                let d = rollSingle(false);
-                currentDice.push(d);
-                if (document.getElementById('expl').checked && d.natural === 10) rollExtra();
-                rerollAvailable = false;
-            }
-            render();
-        }
-
-        function findBestPartition(dice, targetMode) {
-            // Greedy algorithm: scales safely to any number of dice.
-            // Strategy: sort descending, greedily pair/group dice to maximize increments.
-            // For targetMode=15: prefer groups summing >=15 (2 inc), then >=10 (1 inc).
-            // For targetMode=10: groups summing >=10 (1 inc).
-
-            const sorted = [...dice].sort((a, b) => b - a);
-            const used = new Array(sorted.length).fill(false);
-            const sets = [];
-
-            // Helper: try to build one set starting from index `start`
-            // accumulating dice until sum meets threshold, without exceeding wastefully
-            function buildSet(threshold) {
-                let combo = [];
-                let sum = 0;
-                // First pass: pick largest unused dice that fit toward threshold
-                for (let i = 0; i < sorted.length; i++) {
-                    if (used[i]) continue;
-                    if (sum + sorted[i] >= threshold) {
-                        combo.push({ idx: i, val: sorted[i] });
-                        sum += sorted[i];
-                        break; // one die enough
-                    }
-                }
-                if (sum >= threshold) return { combo, sum };
-
-                // Need more dice — keep adding smallest unused that help
-                const candidates = [];
-                for (let i = 0; i < sorted.length; i++) {
-                    if (used[i]) continue;
-                    candidates.push({ idx: i, val: sorted[i] });
-                }
-                // Sort ascending to minimize waste
-                candidates.sort((a, b) => a.val - b.val);
-                combo = [];
-                sum = 0;
-                // Pick from largest first to reach threshold efficiently
-                const desc = [...candidates].reverse();
-                for (const c of desc) {
-                    combo.push(c);
-                    sum += c.val;
-                    if (sum >= threshold) break;
-                }
-                if (sum >= threshold) return { combo, sum };
-                return null;
-            }
-
-            if (targetMode === 15) {
-                // Pass 1: try to form groups summing >= 15 (2 increments each)
-                let changed = true;
-                while (changed) {
-                    changed = false;
-                    // Collect unused
-                    let pool = [];
-                    for (let i = 0; i < sorted.length; i++) {
-                        if (!used[i]) pool.push({ idx: i, val: sorted[i] });
-                    }
-                    // Try greedy: accumulate until sum >= 15
-                    let combo = [], sum = 0;
-                    // Sort pool descending
-                    pool.sort((a, b) => b.val - a.val);
-                    for (const p of pool) {
-                        combo.push(p);
-                        sum += p.val;
-                        if (sum >= 15) break;
-                    }
-                    if (sum >= 15) {
-                        combo.forEach(c => used[c.idx] = true);
-                        sets.push({ v: combo.map(c => c.val), t: sum, type: 15, inc: 2 });
-                        changed = true;
-                    }
-                }
-                // Pass 2: form groups summing >= 10 (1 increment each)
-                let changed2 = true;
-                while (changed2) {
-                    changed2 = false;
-                    let pool = [];
-                    for (let i = 0; i < sorted.length; i++) {
-                        if (!used[i]) pool.push({ idx: i, val: sorted[i] });
-                    }
-                    pool.sort((a, b) => b.val - a.val);
-                    let combo = [], sum = 0;
-                    for (const p of pool) {
-                        combo.push(p);
-                        sum += p.val;
-                        if (sum >= 10) break;
-                    }
-                    if (sum >= 10) {
-                        combo.forEach(c => used[c.idx] = true);
-                        sets.push({ v: combo.map(c => c.val), t: sum, type: 10, inc: 1 });
-                        changed2 = true;
-                    }
-                }
-            } else {
-                // targetMode === 10: form groups summing >= 10
-                let changed = true;
-                while (changed) {
-                    changed = false;
-                    let pool = [];
-                    for (let i = 0; i < sorted.length; i++) {
-                        if (!used[i]) pool.push({ idx: i, val: sorted[i] });
-                    }
-                    pool.sort((a, b) => b.val - a.val);
-                    let combo = [], sum = 0;
-                    for (const p of pool) {
-                        combo.push(p);
-                        sum += p.val;
-                        if (sum >= 10) break;
-                    }
-                    if (sum >= 10) {
-                        combo.forEach(c => used[c.idx] = true);
-                        sets.push({ v: combo.map(c => c.val), t: sum, type: 10, inc: 1 });
-                        changed = true;
-                    }
-                }
-            }
-
-            const leftovers = sorted.filter((_, i) => !used[i]);
-            const totalIncrements = sets.reduce((acc, s) => acc + s.inc, 0);
-            return { sets, leftovers, totalIncrements };
-        }
-
-        function render() {
-            if (currentDice.length === 0) return;
-            const t = LANGS[currentLang];
-            const target = parseInt(document.getElementById('target').value);
-            const resDiv = document.getElementById('results');
-            const anySelected = currentDice.some(d => d.selected);
-            document.getElementById('rerollBtn').style.display = (rerollAvailable && anySelected) ? 'block' : 'none';
-            document.getElementById('rerollBtn').textContent = t.btnReroll;
-
-            let html = `<h3>${t.h3Dice}</h3><div style="text-align:center;">`;
-            currentDice.forEach((d, i) => {
-                html += `<div class="die ${d.selected ? 'selected' : ''}" onclick="toggleSelect(${i})">${d.val}${d.exploded ? `<span class="ext-badge">${t.extBadge}</span>` : ''}</div>`;
-            });
-
-            const result = findBestPartition(currentDice.map(d => d.val), target);
-            const incWord = result.totalIncrements === 1 ? t.summaryOne : t.summaryMany;
-            html += `</div><div class="summary-box">${result.totalIncrements} ${incWord}</div>`;
-            
-            if (result.sets.length > 0) {
-                html += `<h3>${t.h3Combos}</h3>`;
-                result.sets.forEach(s => {
-                    let setClass = s.type === 15 ? 'set-15' : 'set-10';
-                    html += `<div class="set ${setClass}">
-                                <span>${s.v.join(' + ')} = <b>${s.t}</b></span>
-                                <span class="inc-badge">+${s.inc} ${t.incLabel}</span>
-                             </div>`;
-                });
-            }
-
-            if (result.leftovers.length > 0) {
-                html += `<h3>${t.h3Discards}</h3><div class="waste">${t.wasteLabel}: ${result.leftovers.sort((a,b)=>b-a).join(', ')}</div>`;
-            }
-            resDiv.innerHTML = html;
-        }
-    </script>
+    resDiv.innerHTML = html;
+}
+</script>
 </body>
 </html>
